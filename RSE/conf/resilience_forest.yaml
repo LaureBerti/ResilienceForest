@@ -1,0 +1,90 @@
+data:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  kndvi_dir: data/raw/kndvi
+  climate_dir: data/raw/climate
+  subregions_dir: data/subregions
+
+regions:
+  continents:
+    - africa
+    - asia
+    - europe
+    - north_america
+    - south_america
+    - australia_oceania
+  subregions:
+    - amazon
+    - congo
+    - boreal_siberia
+    - southeast_asia
+    - canadian_boreal
+    - scandinavian_boreal
+    - papua_new_guinea
+    - russian_far_east
+
+subregion_bounds:
+  amazon:            {lon_min: -75, lon_max: -45, lat_min: -15, lat_max:  5}
+  congo:             {lon_min:  14, lon_max:  30, lat_min:  -6, lat_max:  6}
+  boreal_siberia:    {lon_min:  60, lon_max: 120, lat_min:  58, lat_max: 72}
+  southeast_asia:    {lon_min:  95, lon_max: 142, lat_min: -10, lat_max: 15}
+  canadian_boreal:   {lon_min: -140, lon_max: -90, lat_min: 55, lat_max: 72}
+  scandinavian_boreal: {lon_min: 14, lon_max: 32, lat_min: 59, lat_max: 71}
+  papua_new_guinea:  {lon_min: 140, lon_max: 156, lat_min: -10, lat_max:  0}
+  russian_far_east:  {lon_min: 130, lon_max: 145, lat_min:  44, lat_max: 60}
+
+gee:
+  collection: MODIS/061/MOD13A3
+  start_date: "2000-01-01"
+  end_date: "2025-12-31"
+  scale: 5000  # 5 km (resampled from 1 km)
+  ifl_asset: users/your_gee_username/IFL_2020  # replace with your GEE asset path
+
+modis:
+  short_name: MOD13A3
+  version: "061"
+  pixel_stride: 5        # sample every 5th pixel → ~5 km effective resolution
+  download_dir: data/raw/modis
+  # Use the IFL vintage that was valid at each time period.
+  # Half-open intervals: [start, end] inclusive.
+  ifl_periods:
+    2000: {start: "2000-01-01", end: "2012-12-31"}
+    2013: {start: "2013-01-01", end: "2015-12-31"}
+    2016: {start: "2016-01-01", end: "2019-12-31"}
+    2020: {start: "2020-01-01", end: "2024-12-31"}
+    2025: {start: "2025-01-01", end: "2025-12-31"}
+
+ifl:
+  gpkg_dir: data/raw/ifl
+  parquet_dir: data/raw/ifl
+
+kndvi:
+  sigma: 0.5
+
+matrix_profile:
+  subsequence_length: 24
+  n_motifs: 3
+  n_discords: 3
+
+analysis:
+  seed: 42
+  n_bootstrap: 1000
+  rolling_window: 36  # months for rolling correlation
+  alpha: 0.05
+  pre_period_end: "2010-01-01"  # temporal split for C4 test
+  n_changepoints: 3             # ruptures: max breakpoints to search
+
+climate_sources:
+  AO:   "https://www.cpc.ncep.noaa.gov/products/precip/CWlink/daily_ao_index/monthly.ao.index.b50.current.ascii"
+  NAO:  "https://www.cpc.ncep.noaa.gov/products/precip/CWlink/pna/norm.nao.monthly.b5001.current.ascii"
+  PNA:  "https://www.cpc.ncep.noaa.gov/products/precip/CWlink/pna/norm.pna.monthly.b5001.current.ascii"
+  ENSO: "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
+
+output:
+  dir: outputs
+  figures_dir: outputs/paper_ready/figures
+  tables_dir: outputs/paper_ready/tables
+  dpi_raster: 300
+  dpi_line: 1000
+
+run_mvp_only: false  # set true for smoke tests
