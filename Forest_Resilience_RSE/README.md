@@ -234,7 +234,7 @@ All parameters are defined in `conf/resilience_forest.yaml`.
 
 If you use this code, please cite:
 
-> Nwachukwu, P. N., & Berti-Équille, L. (2026). Diverging resilience trajectories in global intact forests: A matrix profile analysis of climate teleconnection coupling (2000–2024). *Remote Sensing of Environment*.
+> Nwachukwu, P. N., & Berti-Équille, L. (2026). Diverging resilience trajectories in global intact forests: A matrix profile analysis of climate teleconnection coupling (2000–2024). *under review*.
 
 ---
 
